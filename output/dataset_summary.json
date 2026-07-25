@@ -1,0 +1,15 @@
+{
+  "total_sessions": 109030,
+  "entity_count": 330,
+  "label_distribution": {
+    "normal": 106800,
+    "brute_force": 1017,
+    "credential_stuffing": 427,
+    "low_and_slow_exfiltration": 322,
+    "insider_drift": 200,
+    "lateral_movement": 196,
+    "impossible_travel": 42,
+    "device_spoofing": 26
+  },
+  "anomaly_rate_pct": 2.045
+}

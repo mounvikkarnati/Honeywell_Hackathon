@@ -1,0 +1,792 @@
+[
+  {
+    "pattern": "insider_drift",
+    "n_events": 7,
+    "anchor_ts": "2026-06-01T22:03:22.486397"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 9,
+    "anchor_ts": "2026-06-01T17:54:05.431037"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-04T19:17:03.233037"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 6,
+    "anchor_ts": "2026-06-12T01:08:25.196766"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-10T21:39:54.443399"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-03T21:09:36.084672"
+  },
+  {
+    "pattern": "credential_stuffing",
+    "n_events": 30,
+    "anchor_ts": "2026-06-11T16:59:16.352581"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-02T03:45:29.311462"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-07T02:01:35.837108"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 5,
+    "anchor_ts": "2026-06-01T23:38:16.605202"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T23:22:49.206427"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 9,
+    "anchor_ts": "2026-06-02T18:09:35.326437"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-08T18:16:45.314141"
+  },
+  {
+    "pattern": "credential_stuffing",
+    "n_events": 70,
+    "anchor_ts": "2026-06-12T08:53:01.139663"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T05:34:34.536637"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 45,
+    "anchor_ts": "2026-06-03T04:04:07.146684"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T21:49:21.817090"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 8,
+    "anchor_ts": "2026-06-01T14:49:12.798956"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T02:52:48.430162"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 5,
+    "anchor_ts": "2026-06-07T23:02:53.076145"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-07T23:26:53.603357"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T07:32:28.793745"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 9,
+    "anchor_ts": "2026-06-11T02:06:38.602984"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-14T01:10:53.559882"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-14T10:36:36.255970"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-14T03:53:49.795958"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 12,
+    "anchor_ts": "2026-06-01T20:24:44.640992"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 8,
+    "anchor_ts": "2026-06-01T12:18:41.133648"
+  },
+  {
+    "pattern": "credential_stuffing",
+    "n_events": 34,
+    "anchor_ts": "2026-06-13T14:31:16.902486"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T20:01:11.220561"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 10,
+    "anchor_ts": "2026-06-01T16:36:43.549865"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 8,
+    "anchor_ts": "2026-06-02T01:11:19.074207"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 25,
+    "anchor_ts": "2026-06-10T12:18:15.893295"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-10T04:17:09.415950"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 46,
+    "anchor_ts": "2026-06-02T14:40:05.784676"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 4,
+    "anchor_ts": "2026-06-03T12:52:20.693535"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T11:43:16.981567"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 10,
+    "anchor_ts": "2026-06-01T19:41:18.637671"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-12T11:26:38.852640"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 7,
+    "anchor_ts": "2026-06-02T02:08:55.441021"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 8,
+    "anchor_ts": "2026-06-02T21:49:14.273774"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-09T15:28:20.505999"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 42,
+    "anchor_ts": "2026-06-10T23:04:58.750200"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-14T12:03:18.682652"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T01:59:39.035656"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 9,
+    "anchor_ts": "2026-06-01T15:15:36.300151"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 10,
+    "anchor_ts": "2026-06-01T17:12:10.811194"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-03T19:28:56.941445"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 11,
+    "anchor_ts": "2026-06-01T18:12:33.209485"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-08T01:31:58.476815"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-07T16:07:35.593470"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 9,
+    "anchor_ts": "2026-06-01T15:45:30.371099"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 59,
+    "anchor_ts": "2026-06-07T15:30:08.842704"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-13T03:28:46.141189"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-07T02:26:41.818975"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 26,
+    "anchor_ts": "2026-06-08T16:06:41.538620"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-06T10:53:16.318822"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 8,
+    "anchor_ts": "2026-06-01T03:02:28.768781"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-06T14:31:45.082457"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T17:37:16.963241"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 54,
+    "anchor_ts": "2026-06-11T15:08:58.484696"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-02T03:12:07.611901"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-13T08:27:00.426940"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T16:13:38.238392"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 8,
+    "anchor_ts": "2026-06-01T01:40:24.569782"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 6,
+    "anchor_ts": "2026-06-01T01:41:41.791098"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-03T01:44:37.087119"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 9,
+    "anchor_ts": "2026-06-01T02:06:01.969192"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 12,
+    "anchor_ts": "2026-06-01T11:07:50.337905"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T08:15:47.987527"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-05T01:53:03.321077"
+  },
+  {
+    "pattern": "credential_stuffing",
+    "n_events": 24,
+    "anchor_ts": "2026-06-02T06:25:42.799947"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 46,
+    "anchor_ts": "2026-06-02T07:56:04.399816"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-02T05:51:22.886535"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-06T11:50:59.736241"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 60,
+    "anchor_ts": "2026-06-13T22:33:58.464021"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T06:12:51.053652"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-12T22:34:49.613652"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-13T05:44:49.524311"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 9,
+    "anchor_ts": "2026-06-14T04:00:11.631400"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T18:24:27.591649"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-07T02:03:02.642633"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 6,
+    "anchor_ts": "2026-06-05T14:01:39.401908"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 53,
+    "anchor_ts": "2026-06-07T14:56:41.413022"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 50,
+    "anchor_ts": "2026-06-07T12:23:51.824837"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-11T22:37:02.014480"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 4,
+    "anchor_ts": "2026-06-05T01:22:44.999971"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-03T20:51:02.859592"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 4,
+    "anchor_ts": "2026-06-08T08:42:21.506105"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 52,
+    "anchor_ts": "2026-06-08T12:23:58.391169"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 50,
+    "anchor_ts": "2026-06-06T09:41:53.877201"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T12:26:46.107989"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T12:55:06.307678"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 37,
+    "anchor_ts": "2026-06-04T07:31:02.911258"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-03T20:14:27.575166"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-03T01:06:07.569223"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T09:25:04.314203"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 5,
+    "anchor_ts": "2026-06-09T01:52:52.474778"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 5,
+    "anchor_ts": "2026-06-01T10:25:01.126888"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 35,
+    "anchor_ts": "2026-06-05T02:16:59.801383"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 4,
+    "anchor_ts": "2026-06-04T16:37:30.056069"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 9,
+    "anchor_ts": "2026-06-06T18:52:44.164464"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 7,
+    "anchor_ts": "2026-06-02T08:04:42.195425"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-06T02:57:45.929563"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T13:24:49.487895"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T08:15:23.278550"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 5,
+    "anchor_ts": "2026-06-12T10:25:15.872715"
+  },
+  {
+    "pattern": "credential_stuffing",
+    "n_events": 56,
+    "anchor_ts": "2026-06-01T05:58:19.856980"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 7,
+    "anchor_ts": "2026-06-11T16:21:08.531807"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 27,
+    "anchor_ts": "2026-06-02T20:38:47.183099"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 6,
+    "anchor_ts": "2026-06-04T06:34:35.732564"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 9,
+    "anchor_ts": "2026-06-01T00:11:01.536378"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 7,
+    "anchor_ts": "2026-06-11T22:09:28.374261"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-02T23:59:10.293923"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-13T01:25:04.319314"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 5,
+    "anchor_ts": "2026-06-07T10:54:12.930999"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-01T20:40:21.866542"
+  },
+  {
+    "pattern": "credential_stuffing",
+    "n_events": 37,
+    "anchor_ts": "2026-06-05T05:33:40.862747"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T18:33:07.901643"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 9,
+    "anchor_ts": "2026-06-12T21:39:55.287185"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 38,
+    "anchor_ts": "2026-06-08T06:37:26.799099"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 24,
+    "anchor_ts": "2026-06-13T12:51:23.450685"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-07T08:21:09.402990"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 7,
+    "anchor_ts": "2026-06-09T00:42:41.024715"
+  },
+  {
+    "pattern": "credential_stuffing",
+    "n_events": 36,
+    "anchor_ts": "2026-06-10T01:00:23.818440"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-12T17:28:49.634154"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 4,
+    "anchor_ts": "2026-06-14T00:44:50.726594"
+  },
+  {
+    "pattern": "credential_stuffing",
+    "n_events": 47,
+    "anchor_ts": "2026-06-03T01:19:14.048529"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 55,
+    "anchor_ts": "2026-06-05T00:30:20.545040"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T20:09:56.276736"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-08T22:44:30.693382"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 7,
+    "anchor_ts": "2026-06-08T18:39:24.776890"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 7,
+    "anchor_ts": "2026-06-01T01:44:00.728967"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T22:17:44.943526"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 4,
+    "anchor_ts": "2026-06-04T10:17:31.772140"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-07T10:36:25.889002"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 41,
+    "anchor_ts": "2026-06-01T21:10:04.832658"
+  },
+  {
+    "pattern": "credential_stuffing",
+    "n_events": 63,
+    "anchor_ts": "2026-06-06T11:30:39.398298"
+  },
+  {
+    "pattern": "credential_stuffing",
+    "n_events": 30,
+    "anchor_ts": "2026-06-10T21:50:07.453068"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 35,
+    "anchor_ts": "2026-06-14T08:31:53.083345"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 9,
+    "anchor_ts": "2026-06-08T23:11:12.021685"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-03T14:35:04.196907"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T08:43:15.229174"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 16,
+    "anchor_ts": "2026-06-04T20:12:12.328849"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 22,
+    "anchor_ts": "2026-06-08T00:03:28.279658"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-03T12:21:19.808700"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-03T09:03:36.207468"
+  },
+  {
+    "pattern": "device_spoofing",
+    "n_events": 1,
+    "anchor_ts": "2026-06-13T18:08:22.573967"
+  },
+  {
+    "pattern": "low_and_slow_exfiltration",
+    "n_events": 14,
+    "anchor_ts": "2026-06-01T02:16:12.306331"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 9,
+    "anchor_ts": "2026-06-06T13:26:46.636522"
+  },
+  {
+    "pattern": "lateral_movement",
+    "n_events": 8,
+    "anchor_ts": "2026-06-04T14:22:58.317785"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 8,
+    "anchor_ts": "2026-06-01T16:10:14.948838"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 26,
+    "anchor_ts": "2026-06-07T02:49:45.095236"
+  },
+  {
+    "pattern": "impossible_travel",
+    "n_events": 2,
+    "anchor_ts": "2026-06-04T06:27:46.377876"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 7,
+    "anchor_ts": "2026-06-01T04:53:40.095454"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 10,
+    "anchor_ts": "2026-06-01T23:09:00.861159"
+  },
+  {
+    "pattern": "insider_drift",
+    "n_events": 8,
+    "anchor_ts": "2026-06-01T05:51:10.075636"
+  },
+  {
+    "pattern": "brute_force",
+    "n_events": 53,
+    "anchor_ts": "2026-06-06T07:54:51.370398"
+  }
+]

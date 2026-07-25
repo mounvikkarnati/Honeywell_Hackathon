@@ -1,0 +1,218 @@
+{
+  "train_rows": 76321,
+  "test_rows": 32709,
+  "train_test_cutoff_timestamp": "2026-06-10 16:21:20",
+  "contamination_setting": 0.02,
+  "detection_metrics": {
+    "precision": 0.9892183288409704,
+    "recall": 0.592891760904685,
+    "f1": 0.7414141414141414,
+    "roc_auc": 0.9754819718974954,
+    "pr_auc": 0.8349844908941323,
+    "false_positive_rate": 0.00012464942349641633,
+    "n_total": 32709,
+    "n_anomalies_true": 619,
+    "n_flagged": 371,
+    "precision_at_k": {
+      "top_1pct": {
+        "k_fraction": 0.01,
+        "k_events": 328,
+        "true_positives_in_top_k": 327,
+        "precision_at_k": 0.9969512195121951,
+        "recall_captured_at_k": 0.5282714054927302
+      },
+      "top_2pct": {
+        "k_fraction": 0.02,
+        "k_events": 655,
+        "true_positives_in_top_k": 461,
+        "precision_at_k": 0.7038167938931298,
+        "recall_captured_at_k": 0.7447495961227787
+      },
+      "top_5pct": {
+        "k_fraction": 0.05,
+        "k_events": 1636,
+        "true_positives_in_top_k": 559,
+        "precision_at_k": 0.3416870415647922,
+        "recall_captured_at_k": 0.9030694668820679
+      }
+    }
+  },
+  "binary_confusion_matrix": {
+    "matrix": [
+      [
+        32086,
+        4
+      ],
+      [
+        252,
+        367
+      ]
+    ],
+    "labels": [
+      "normal",
+      "anomaly"
+    ],
+    "true_negative": 32086,
+    "false_positive": 4,
+    "false_negative": 252,
+    "true_positive": 367
+  },
+  "classification_metrics": {
+    "brute_force": {
+      "precision": 1.0,
+      "recall": 0.9953488372093023,
+      "f1-score": 0.9976689976689976,
+      "support": 215.0
+    },
+    "credential_stuffing": {
+      "precision": 0.9939393939393939,
+      "recall": 1.0,
+      "f1-score": 0.9969604863221885,
+      "support": 164.0
+    },
+    "device_spoofing": {
+      "precision": 1.0,
+      "recall": 0.8888888888888888,
+      "f1-score": 0.9411764705882353,
+      "support": 9.0
+    },
+    "impossible_travel": {
+      "precision": 0.75,
+      "recall": 0.6,
+      "f1-score": 0.6666666666666666,
+      "support": 10.0
+    },
+    "insider_drift": {
+      "precision": 0.6172839506172839,
+      "recall": 0.78125,
+      "f1-score": 0.6896551724137931,
+      "support": 64.0
+    },
+    "lateral_movement": {
+      "precision": 0.8909090909090909,
+      "recall": 0.875,
+      "f1-score": 0.8828828828828829,
+      "support": 56.0
+    },
+    "low_and_slow_exfiltration": {
+      "precision": 0.7954545454545454,
+      "recall": 0.693069306930693,
+      "f1-score": 0.7407407407407407,
+      "support": 101.0
+    },
+    "accuracy": 0.9063004846526656,
+    "macro avg": {
+      "precision": 0.8639409972743307,
+      "recall": 0.8333652904326978,
+      "f1-score": 0.8451073453262149,
+      "support": 619.0
+    },
+    "weighted avg": {
+      "precision": 0.9115412788810742,
+      "recall": 0.9063004846526656,
+      "f1-score": 0.907159606540183,
+      "support": 619.0
+    }
+  },
+  "multiclass_confusion_matrix": {
+    "matrix": [
+      [
+        214,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        164,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        8,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        6,
+        3,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        50,
+        4,
+        10
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        49,
+        7
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        28,
+        2,
+        70
+      ]
+    ],
+    "labels": [
+      "brute_force",
+      "credential_stuffing",
+      "device_spoofing",
+      "impossible_travel",
+      "insider_drift",
+      "lateral_movement",
+      "low_and_slow_exfiltration"
+    ]
+  },
+  "classifier_feature_importances": {
+    "log_implied_speed_kmh": 0.17018299222160949,
+    "new_device_flag": 0.1316430542951724,
+    "log_time_gap_seconds": 0.11846119808937909,
+    "new_resource_flag": 0.09091596414198551,
+    "duration_zscore": 0.0838140342975739,
+    "log_ip_recent_distinct_entities": 0.07142986535416967,
+    "hour_zscore": 0.06816977911358135,
+    "log_prior_session_count": 0.05741620604397846,
+    "rolling_failure_rate": 0.05405641453861357,
+    "auth_failure_flag": 0.046082817314480176,
+    "log_ip_recent_event_count": 0.04438512216409745,
+    "log_ip_recent_failure_count": 0.04052180045716335,
+    "off_hours_flag": 0.010949425166963251,
+    "resource_sensitive_flag": 0.007643973956315393,
+    "is_cold_start": 0.004327352844916902
+  },
+  "plot_paths": {
+    "roc_curve": "./output/evaluation/roc_curve.png",
+    "pr_curve": "./output/evaluation/pr_curve.png",
+    "confusion_matrix_binary": "./output/evaluation/confusion_matrix_binary.png",
+    "score_distribution": "./output/evaluation/score_distribution.png",
+    "alert_budget_curve": "./output/evaluation/alert_budget_curve.png",
+    "confusion_matrix_multiclass": "./output/evaluation/confusion_matrix_multiclass.png"
+  }
+}

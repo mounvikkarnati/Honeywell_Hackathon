@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1. Install dependencies",
+      "type": "shell",
+      "command": "pip install -r requirements.txt --break-system-packages || pip install -r requirements.txt",
+      "problemMatcher": []
+    },
+    {
+      "label": "2. Generate synthetic data",
+      "type": "shell",
+      "command": "python3 -m generator.main --days 14 --users 300 --service-accounts 15 --edge-devices 15 --anomaly-rate 0.02 --outdir ./output",
+      "problemMatcher": []
+    },
+    {
+      "label": "3. Ingest data into DB",
+      "type": "shell",
+      "command": "python3 -m backend.ingest --outdir ./output --reset",
+      "problemMatcher": []
+    },
+    {
+      "label": "4. Run API server",
+      "type": "shell",
+      "command": "uvicorn backend.app:app --reload --port 8000",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

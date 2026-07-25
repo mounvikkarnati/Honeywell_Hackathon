@@ -1,0 +1,18 @@
+# Phase 1 - Data Generator
+faker
+numpy
+pandas
+
+# Phase 2 - Backend
+fastapi
+uvicorn[standard]
+sqlalchemy
+websockets
+
+# Phase 3 - ML + Evaluation
+scikit-learn
+matplotlib
+joblib
+
+# Phase 5 - Explainability
+shap

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SENTINEL — Behavioral Anomaly Detection</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+<style>
+  :root {
+    --void: #0B0D0A;
+    --panel: #14170F;
+    --panel-raised: #1B1F14;
+    --line: #2A2F1F;
+    --amber: #FFB000;
+    --amber-dim: #8C6300;
+    --amber-faint: #4A3A00;
+    --red: #FF3B30;
+    --text: #E8E6DD;
+    --text-dim: #8A8C7D;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--void);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--panel); }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+
+  @keyframes sweep {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .radar-sweep {
+    position: absolute;
+    inset: -40%;
+    background: conic-gradient(from 0deg, transparent 0deg, transparent 300deg, rgba(255,176,0,0.10) 340deg, rgba(255,176,0,0.22) 358deg, transparent 360deg);
+    animation: sweep 6s linear infinite;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .radar-sweep { animation: none; }
+  }
+
+  .scan-panel {
+    position: relative;
+    overflow: hidden;
+    background: var(--panel);
+    border: 1px solid var(--line);
+  }
+
+  .risk-bar-track { background: #21251A; }
+
+  .blink { animation: blink 1.6s ease-in-out infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  table.data-table { border-collapse: collapse; width: 100%; }
+  table.data-table th {
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    background: var(--panel);
+    z-index: 1;
+  }
+  table.data-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #1D2114;
+    font-size: 13px;
+  }
+  table.data-table tbody tr:hover { background: var(--panel-raised); cursor: pointer; }
+
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    display: inline-block;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/plain" id="app-source">
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+const API = "";
+
+const ATTACK_COLORS = {
+  brute_force: "#FF3B30",
+  credential_stuffing: "#FF6B4A",
+  impossible_travel: "#FFB000",
+  device_spoofing: "#FFD24A",
+  lateral_movement: "#FF8A00",
+  low_and_slow_exfiltration: "#B08CFF",
+  insider_drift: "#8A8C7D",
+};
+
+const RECOMMENDATIONS = {
+  brute_force: "Lock the account after further failures, block the source IP at the perimeter, and verify the legitimate user before restoring access.",
+  credential_stuffing: "Block the source IP range, force password rotation for all targeted accounts, and check for any successful logins within the campaign window.",
+  impossible_travel: "Verify with the account owner out-of-band. If unconfirmed, suspend the session and require MFA re-authentication.",
+  device_spoofing: "Revoke trust for the unrecognized device fingerprint and require device re-enrollment before granting further access.",
+  lateral_movement: "Review the full sequence of resources accessed this session for privilege escalation. Isolate the entity if compromise is suspected.",
+  low_and_slow_exfiltration: "Audit resources accessed by this entity over the trailing weeks and check outbound data volume against its baseline.",
+  insider_drift: "Low-confidence signal — likely a legitimate role change. Review with the entity's manager before taking action.",
+};
+
+function fmtTime(ts) {
+  if (!ts) return "—";
+  const d = new Date(ts);
+  return d.toLocaleString(undefined, { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+
+function riskColor(score) {
+  if (score >= 80) return "var(--red)";
+  if (score >= 50) return "var(--amber)";
+  return "var(--amber-dim)";
+}
+
+function RiskBar({ score }) {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="risk-bar-track w-16 h-1.5 rounded-sm overflow-hidden">
+        <div style={{ width: `${score}%`, background: riskColor(score) }} className="h-full" />
+      </div>
+      <span className="mono text-xs" style={{ color: riskColor(score) }}>{score.toFixed(0)}</span>
+    </div>
+  );
+}
+
+function Badge({ type }) {
+  const color = ATTACK_COLORS[type] || "#8A8C7D";
+  return (
+    <span className="badge" style={{ color, background: color + "1A", border: `1px solid ${color}44` }}>
+      {(type || "unknown").replaceAll("_", " ")}
+    </span>
+  );
+}
+
+function Header({ stats, alertStats, wsLive }) {
+  return (
+    <div className="scan-panel px-6 py-5 flex items-center justify-between">
+      <div className="radar-sweep" />
+      <div className="relative z-10">
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 rounded-full blink" style={{ background: "var(--amber)" }} />
+          <h1 className="mono text-xl tracking-widest" style={{ color: "var(--amber)" }}>SENTINEL</h1>
+        </div>
+        <p className="text-xs mt-1" style={{ color: "var(--text-dim)" }}>
+          Behavioral Anomaly Detection — {wsLive ? "LIVE FEED ACTIVE" : "monitoring idle"}
+        </p>
+      </div>
+      <div className="relative z-10 flex gap-8 mono">
+        <Stat label="SESSIONS" value={stats?.total_sessions?.toLocaleString() ?? "—"} />
+        <Stat label="ENTITIES" value={stats?.total_entities ?? "—"} />
+        <Stat label="ALERTS" value={alertStats?.total_alerts?.toLocaleString() ?? "—"} accent />
+      </div>
+    </div>
+  );
+}
+
+function Stat({ label, value, accent }) {
+  return (
+    <div className="text-right">
+      <div className="text-[10px] tracking-widest" style={{ color: "var(--text-dim)" }}>{label}</div>
+      <div className="text-lg" style={{ color: accent ? "var(--red)" : "var(--text)" }}>{value}</div>
+    </div>
+  );
+}
+
+function TabNav({ active, onChange }) {
+  const tabs = [
+    ["alerts", "Alert Queue"],
+    ["live", "Live Feed"],
+    ["entities", "Entity Explorer"],
+    ["devices", "Device Trust"],
+    ["map", "World Map"],
+    ["eval", "Model Evaluation"],
+  ];
+  return (
+    <div className="flex border-b" style={{ borderColor: "var(--line)" }}>
+      {tabs.map(([key, label]) => (
+        <button
+          key={key}
+          onClick={() => onChange(key)}
+          className="mono text-xs px-5 py-3 tracking-wide transition-colors"
+          style={{
+            color: active === key ? "var(--amber)" : "var(--text-dim)",
+            borderBottom: active === key ? "2px solid var(--amber)" : "2px solid transparent",
+            background: active === key ? "var(--panel)" : "transparent",
+          }}
+        >{label}</button>
+      ))}
+    </div>
+  );
+}
+
+// ---------------- Alert Queue ----------------
+
+function AlertQueue({ alerts, loading, filterType, setFilterType, onSelect }) {
+  const types = useMemo(() => [...new Set(alerts.map(a => a.predicted_type).filter(Boolean))], [alerts]);
+  const filtered = filterType === "all" ? alerts : alerts.filter(a => a.predicted_type === filterType);
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="flex items-center gap-3 px-4 py-3" style={{ borderBottom: "1px solid var(--line)" }}>
+        <span className="mono text-xs" style={{ color: "var(--text-dim)" }}>FILTER</span>
+        <select
+          value={filterType}
+          onChange={e => setFilterType(e.target.value)}
+          className="mono text-xs px-2 py-1 rounded"
+          style={{ background: "var(--panel-raised)", color: "var(--text)", border: "1px solid var(--line)" }}
+        >
+          <option value="all">all types ({alerts.length})</option>
+          {types.map(t => (
+            <option key={t} value={t}>{t.replaceAll("_", " ")} ({alerts.filter(a => a.predicted_type === t).length})</option>
+          ))}
+        </select>
+        {loading && <span className="mono text-xs" style={{ color: "var(--amber-dim)" }}>loading…</span>}
+      </div>
+      <div className="overflow-auto flex-1">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Risk</th><th>Type</th><th>Entity</th><th>Resource</th><th>Time</th><th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map(a => (
+              <tr key={a.session_id} onClick={() => onSelect(a)}>
+                <td><RiskBar score={a.risk_score} /></td>
+                <td><Badge type={a.predicted_type} /></td>
+                <td className="mono">{a.entity_id}</td>
+                <td>{a.resource_accessed}</td>
+                <td className="mono text-xs" style={{ color: "var(--text-dim)" }}>{fmtTime(a.timestamp)}</td>
+                <td className="mono text-xs" style={{ color: "var(--text-dim)" }}>{a.geo_city}, {a.geo_country}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {filtered.length === 0 && !loading && (
+          <div className="text-center py-16 mono text-sm" style={{ color: "var(--text-dim)" }}>No alerts match this filter.</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function AlertDetail({ alert, onClose }) {
+  if (!alert) return null;
+  const factors = alert.reason?.top_factors || [];
+  const maxMag = Math.max(1, ...factors.map(f => f.deviation_magnitude));
+  const classFactors = alert.reason?.classification?.top_factors || [];
+  const maxClassMag = Math.max(0.001, ...classFactors.map(f => Math.abs(f.shap_contribution)));
+
+  return (
+    <div className="fixed inset-0 z-50 flex justify-end" style={{ background: "rgba(0,0,0,0.6)" }} onClick={onClose}>
+      <div className="scan-panel w-[440px] h-full overflow-y-auto p-6" onClick={e => e.stopPropagation()}>
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <div className="mono text-xs" style={{ color: "var(--text-dim)" }}>ALERT</div>
+            <div className="mono text-sm">{alert.session_id}</div>
+          </div>
+          <button onClick={onClose} className="mono text-xs px-2 py-1" style={{ color: "var(--text-dim)" }}>✕ close</button>
+        </div>
+
+        <div className="text-center py-6 mb-4 rounded" style={{ background: "var(--panel-raised)" }}>
+          <div className="mono text-4xl" style={{ color: riskColor(alert.risk_score) }}>{alert.risk_score.toFixed(1)}</div>
+          <div className="mono text-[10px] tracking-widest mt-1" style={{ color: "var(--text-dim)" }}>RISK SCORE</div>
+          <div className="mt-3"><Badge type={alert.predicted_type} /></div>
+        </div>
+
+        <Section title="Why flagged">
+          <p className="text-sm leading-relaxed mb-3">{alert.reason?.summary}</p>
+          {factors.map(f => (
+            <div key={f.feature} className="mb-2">
+              <div className="flex justify-between text-xs mb-1">
+                <span style={{ color: "var(--text-dim)" }}>{f.description}</span>
+                <span className="mono">{f.deviation_magnitude.toFixed(1)}σ</span>
+              </div>
+              <div className="risk-bar-track h-1 rounded-sm overflow-hidden">
+                <div style={{ width: `${(f.deviation_magnitude / maxMag) * 100}%`, background: "var(--amber)" }} className="h-full" />
+              </div>
+            </div>
+          ))}
+        </Section>
+
+        {classFactors.length > 0 && (
+          <Section title="Why this attack type (SHAP)">
+            <p className="text-sm leading-relaxed mb-3">{alert.reason?.classification?.summary}</p>
+            {classFactors.map(f => (
+              <div key={f.feature} className="mb-2">
+                <div className="flex justify-between text-xs mb-1">
+                  <span style={{ color: f.direction === "supports" ? "var(--text-dim)" : "#FF6B6B99" }}>
+                    {f.direction === "supports" ? "↑" : "↓"} {f.description}
+                  </span>
+                  <span className="mono">{f.shap_contribution > 0 ? "+" : ""}{f.shap_contribution.toFixed(3)}</span>
+                </div>
+                <div className="risk-bar-track h-1 rounded-sm overflow-hidden">
+                  <div style={{
+                    width: `${(Math.abs(f.shap_contribution) / maxClassMag) * 100}%`,
+                    background: f.direction === "supports" ? "var(--amber)" : "#FF6B6B",
+                  }} className="h-full" />
+                </div>
+              </div>
+            ))}
+          </Section>
+        )}
+
+        <Section title="Recommended action">
+          <p className="text-sm leading-relaxed" style={{ color: "var(--amber)" }}>
+            {RECOMMENDATIONS[alert.predicted_type] || "Review session context and escalate per standard procedure."}
+          </p>
+        </Section>
+
+        <Section title="Session context">
+          <KV k="Entity" v={`${alert.entity_id} (${alert.entity_type})`} />
+          <KV k="Timestamp" v={fmtTime(alert.timestamp)} />
+          <KV k="Resource" v={alert.resource_accessed} />
+          <KV k="Auth" v={`${alert.auth_method} — ${alert.auth_result}`} />
+          <KV k="Source IP" v={alert.source_ip} />
+          <KV k="Location" v={`${alert.geo_city}, ${alert.geo_country}`} />
+          <KV k="Device" v={alert.device_os} />
+          <KV k="Session length" v={`${alert.session_duration.toFixed(1)}s`} />
+        </Section>
+      </div>
+    </div>
+  );
+}
+
+function Section({ title, children }) {
+  return (
+    <div className="mb-5">
+      <div className="mono text-[10px] tracking-widest mb-2" style={{ color: "var(--amber-dim)" }}>{title.toUpperCase()}</div>
+      {children}
+    </div>
+  );
+}
+function KV({ k, v }) {
+  return (
+    <div className="flex justify-between text-xs py-1.5" style={{ borderBottom: "1px solid #1D2114" }}>
+      <span style={{ color: "var(--text-dim)" }}>{k}</span>
+      <span className="mono">{v}</span>
+    </div>
+  );
+}
+
+// ---------------- Live Feed ----------------
+
+function LiveFeed() {
+  const [events, setEvents] = useState([]);
+  const [connected, setConnected] = useState(false);
+  const [duration, setDuration] = useState(60);
+  const wsRef = useRef(null);
+  const listRef = useRef(null);
+
+  const connect = () => {
+    if (wsRef.current) wsRef.current.close();
+    setEvents([]);
+    const proto = location.protocol === "https:" ? "wss" : "ws";
+    const ws = new WebSocket(`${proto}://${location.host}/ws/stream?duration=${duration}&limit=3000`);
+    ws.onopen = () => setConnected(true);
+    ws.onclose = () => setConnected(false);
+    ws.onmessage = (msg) => {
+      const data = JSON.parse(msg.data);
+      setEvents(prev => [data, ...prev].slice(0, 250));
+    };
+    wsRef.current = ws;
+  };
+
+  useEffect(() => () => wsRef.current && wsRef.current.close(), []);
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="flex items-center gap-3 px-4 py-3" style={{ borderBottom: "1px solid var(--line)" }}>
+        <button
+          onClick={connect}
+          className="mono text-xs px-4 py-1.5 rounded"
+          style={{ background: connected ? "var(--amber-faint)" : "var(--amber)", color: connected ? "var(--amber)" : "#000" }}
+        >
+          {connected ? "● streaming" : "▶ start replay"}
+        </button>
+        <label className="mono text-xs flex items-center gap-2" style={{ color: "var(--text-dim)" }}>
+          compress into
+          <input type="number" value={duration} onChange={e => setDuration(Number(e.target.value))}
+            className="w-16 px-2 py-1 rounded mono text-xs" style={{ background: "var(--panel-raised)", border: "1px solid var(--line)", color: "var(--text)" }} />
+          seconds
+        </label>
+        <span className="mono text-xs ml-auto" style={{ color: "var(--text-dim)" }}>{events.length} events shown</span>
+      </div>
+      <div ref={listRef} className="overflow-auto flex-1 px-4 py-2">
+        {events.length === 0 && (
+          <div className="text-center py-16 mono text-sm" style={{ color: "var(--text-dim)" }}>
+            Press "start replay" to stream the dataset chronologically, compressed into the window above.
+          </div>
+        )}
+        {events.map((e, i) => {
+          const flagged = e.risk_score != null;
+          return (
+            <div key={i} className="flex items-center gap-3 py-1.5 text-xs mono" style={{ borderBottom: "1px solid #1D2114", opacity: flagged ? 1 : 0.6 }}>
+              <span style={{ color: "var(--text-dim)", minWidth: 70 }}>{new Date(e.timestamp).toLocaleTimeString()}</span>
+              <span style={{ minWidth: 90 }}>{e.entity_id}</span>
+              <span style={{ color: "var(--text-dim)", minWidth: 100 }}>{e.resource_accessed}</span>
+              <span style={{ color: "var(--text-dim)", minWidth: 90 }}>{e.geo_city}</span>
+              {flagged ? (
+                <span style={{ color: riskColor(e.risk_score) }}>⚠ {e.risk_score.toFixed(0)} {e.predicted_type}</span>
+              ) : (
+                <span style={{ color: "#3A3D2E" }}>normal</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ---------------- Entity Explorer ----------------
+
+function EntityExplorer({ alerts }) {
+  const [query, setQuery] = useState("");
+  const [entities, setEntities] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API}/entities?limit=500`).then(r => r.json()).then(setEntities);
+  }, []);
+
+  const filtered = entities.filter(e => e.entity_id.includes(query)).slice(0, 30);
+
+  const select = async (id) => {
+    const [profile, hist] = await Promise.all([
+      fetch(`${API}/entities/${id}`).then(r => r.json()),
+      fetch(`${API}/entities/${id}/history?limit=40`).then(r => r.json()),
+    ]);
+    setSelected(profile);
+    setHistory(hist);
+  };
+
+  const entityAlertIds = new Set(alerts.filter(a => a.entity_id === selected?.entity_id).map(a => a.session_id));
+
+  return (
+    <div className="flex h-full">
+      <div className="w-64 border-r overflow-y-auto" style={{ borderColor: "var(--line)" }}>
+        <div className="p-3">
+          <input
+            placeholder="search entity_id…"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            className="w-full px-3 py-1.5 rounded mono text-xs"
+            style={{ background: "var(--panel-raised)", border: "1px solid var(--line)", color: "var(--text)" }}
+          />
+        </div>
+        {filtered.map(e => (
+          <div key={e.entity_id} onClick={() => select(e.entity_id)}
+            className="px-4 py-2 mono text-xs cursor-pointer"
+            style={{ background: selected?.entity_id === e.entity_id ? "var(--panel-raised)" : "transparent", color: "var(--text-dim)" }}>
+            {e.entity_id} <span className="opacity-50">· {e.entity_type}</span>
+          </div>
+        ))}
+      </div>
+      <div className="flex-1 overflow-y-auto p-6">
+        {!selected && <div className="mono text-sm" style={{ color: "var(--text-dim)" }}>Select an entity to view its profile and recent history.</div>}
+        {selected && (
+          <div>
+            <h2 className="mono text-lg mb-1">{selected.entity_id}</h2>
+            <Badge type={selected.entity_type} />
+            <div className="grid grid-cols-2 gap-4 mt-5">
+              <div className="scan-panel p-4">
+                <div className="mono text-[10px] tracking-widest mb-2" style={{ color: "var(--amber-dim)" }}>PROFILE</div>
+                <KV k="Role sensitivity" v={selected.role_sensitivity} />
+                <KV k="Typical auth" v={selected.typical_auth} />
+                <KV k="Sessions/day" v={selected.sessions_per_day.toFixed(1)} />
+                <KV k="Avg duration" v={`${selected.avg_session_duration.toFixed(0)}s`} />
+                <KV k="First seen" v={fmtTime(selected.first_seen)} />
+                <KV k="Total sessions" v={selected.session_count} />
+              </div>
+              <div className="scan-panel p-4">
+                <div className="mono text-[10px] tracking-widest mb-2" style={{ color: "var(--amber-dim)" }}>RESOURCE POOL</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {selected.resource_pool.map(r => (
+                    <span key={r} className="badge" style={{ color: "var(--text-dim)", border: "1px solid var(--line)" }}>{r}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mono text-[10px] tracking-widest mt-6 mb-2" style={{ color: "var(--amber-dim)" }}>RECENT ACTIVITY ({history.length})</div>
+            <table className="data-table">
+              <thead><tr><th>Time</th><th>Resource</th><th>Auth</th><th>Location</th><th></th></tr></thead>
+              <tbody>
+                {history.map(h => (
+                  <tr key={h.session_id}>
+                    <td className="mono text-xs">{fmtTime(h.timestamp)}</td>
+                    <td>{h.resource_accessed}</td>
+                    <td className="mono text-xs" style={{ color: h.auth_result === "failure" ? "var(--red)" : "var(--text-dim)" }}>{h.auth_result}</td>
+                    <td className="mono text-xs" style={{ color: "var(--text-dim)" }}>{h.geo_city}</td>
+                    <td>{entityAlertIds.has(h.session_id) && <span style={{ color: "var(--red)" }}>⚠</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ---------------- Device Trust ----------------
+
+function DeviceTrust() {
+  const [devices, setDevices] = useState([]);
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    fetch(`${API}/devices/trust`).then(r => r.json()).then(setDevices);
+  }, []);
+
+  const flagged = devices.filter(d => d.trust_status === "flagged");
+  const shown = showAll ? devices : flagged;
+
+  return (
+    <div className="p-6 overflow-y-auto h-full">
+      <div className="flex items-center justify-between mb-4">
+        <div className="mono text-sm">{flagged.length} entities with untrusted device activity <span style={{ color: "var(--text-dim)" }}>/ {devices.length} total</span></div>
+        <button onClick={() => setShowAll(!showAll)} className="mono text-xs px-3 py-1.5 rounded" style={{ background: "var(--panel-raised)", border: "1px solid var(--line)", color: "var(--text-dim)" }}>
+          {showAll ? "show flagged only" : "show all entities"}
+        </button>
+      </div>
+      <table className="data-table">
+        <thead><tr><th>Entity</th><th>Type</th><th>Status</th><th>Known devices</th><th>Flagged devices</th></tr></thead>
+        <tbody>
+          {shown.map(d => (
+            <tr key={d.entity_id}>
+              <td className="mono">{d.entity_id}</td>
+              <td className="mono text-xs" style={{ color: "var(--text-dim)" }}>{d.entity_type}</td>
+              <td>
+                <span className="badge" style={{
+                  color: d.trust_status === "flagged" ? "var(--red)" : "#7CFF8C",
+                  background: d.trust_status === "flagged" ? "#FF3B301A" : "#7CFF8C1A",
+                  border: `1px solid ${d.trust_status === "flagged" ? "#FF3B3044" : "#7CFF8C44"}`,
+                }}>{d.trust_status}</span>
+              </td>
+              <td className="mono text-xs" style={{ color: "var(--text-dim)" }}>{d.known_device_fingerprints.length}</td>
+              <td className="mono text-xs" style={{ color: d.flagged_device_fingerprints.length ? "var(--red)" : "var(--text-dim)" }}>
+                {d.flagged_device_fingerprints.join(", ") || "—"}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// ---------------- World Map ----------------
+
+function WorldMap({ alerts }) {
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    if (!mapRef.current || alerts.length === 0) return;
+    const trace = {
+      type: "scattergeo",
+      lat: alerts.map(a => a.geo_lat),
+      lon: alerts.map(a => a.geo_lon),
+      text: alerts.map(a => `${a.entity_id}<br>${a.predicted_type}<br>risk ${a.risk_score.toFixed(0)}`),
+      marker: {
+        size: alerts.map(a => 4 + a.risk_score / 10),
+        color: alerts.map(a => a.risk_score),
+        colorscale: [[0, "#8C6300"], [0.6, "#FFB000"], [1, "#FF3B30"]],
+        line: { width: 0 },
+        opacity: 0.75,
+      },
+      hoverinfo: "text",
+    };
+    const layout = {
+      paper_bgcolor: "#14170F",
+      plot_bgcolor: "#14170F",
+      geo: {
+        bgcolor: "#14170F",
+        showland: true, landcolor: "#1B1F14",
+        showcountries: true, countrycolor: "#2A2F1F",
+        showocean: true, oceancolor: "#0B0D0A",
+        coastlinecolor: "#2A2F1F",
+        projection: { type: "natural earth" },
+      },
+      margin: { t: 10, b: 10, l: 10, r: 10 },
+      font: { color: "#E8E6DD", family: "IBM Plex Mono" },
+    };
+    Plotly.newPlot(mapRef.current, [trace], layout, { displayModeBar: false, responsive: true });
+  }, [alerts]);
+
+  return <div className="h-full p-4"><div ref={mapRef} style={{ width: "100%", height: "100%" }} /></div>;
+}
+
+// ---------------- Model Evaluation ----------------
+
+function EvalPanel() {
+  const [summary, setSummary] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API}/evaluation/summary`).then(r => r.json()).then(setSummary);
+  }, []);
+
+  if (!summary) return <div className="p-6 mono text-sm" style={{ color: "var(--text-dim)" }}>Loading evaluation results…</div>;
+  if (summary.error) return <div className="p-6 mono text-sm" style={{ color: "var(--red)" }}>{summary.error}</div>;
+
+  const dm = summary.detection_metrics;
+  const plots = ["roc_curve", "pr_curve", "confusion_matrix_binary", "score_distribution", "alert_budget_curve", "confusion_matrix_multiclass"];
+
+  return (
+    <div className="p-6 overflow-y-auto h-full">
+      <div className="mb-4 px-3 py-2 rounded text-xs mono" style={{ background: "var(--panel-raised)", color: "var(--text-dim)", border: "1px solid var(--line)" }}>
+        Evaluated on held-out ground truth (test split), for validation purposes only — never used by the live detection pipeline above.
+      </div>
+      <div className="grid grid-cols-4 gap-3 mb-6">
+        <MetricCard label="Precision" value={dm.precision} />
+        <MetricCard label="Recall" value={dm.recall} />
+        <MetricCard label="F1" value={dm.f1} />
+        <MetricCard label="ROC-AUC" value={dm.roc_auc} />
+        <MetricCard label="PR-AUC" value={dm.pr_auc} />
+        <MetricCard label="False Positive Rate" value={dm.false_positive_rate} pct />
+        <MetricCard label="Precision @ top 1%" value={dm.precision_at_k.top_1pct.precision_at_k} />
+        <MetricCard label="Recall @ top 1%" value={dm.precision_at_k.top_1pct.recall_captured_at_k} />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        {plots.map(p => (
+          <div key={p} className="scan-panel p-2">
+            <img src={`${API}/evaluation-assets/${p}.png`} style={{ width: "100%" }} alt={p} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MetricCard({ label, value, pct }) {
+  const display = value == null ? "—" : pct ? `${(value * 100).toFixed(2)}%` : value.toFixed(3);
+  return (
+    <div className="scan-panel p-3">
+      <div className="mono text-[10px] tracking-widest" style={{ color: "var(--text-dim)" }}>{label.toUpperCase()}</div>
+      <div className="mono text-xl mt-1" style={{ color: "var(--amber)" }}>{display}</div>
+    </div>
+  );
+}
+
+// ---------------- App ----------------
+
+function App() {
+  const [tab, setTab] = useState("alerts");
+  const [alerts, setAlerts] = useState([]);
+  const [loadingAlerts, setLoadingAlerts] = useState(true);
+  const [filterType, setFilterType] = useState("all");
+  const [selectedAlert, setSelectedAlert] = useState(null);
+  const [stats, setStats] = useState(null);
+  const [alertStats, setAlertStats] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API}/stats`).then(r => r.json()).then(setStats);
+    fetch(`${API}/stats/alerts`).then(r => r.json()).then(setAlertStats);
+    fetch(`${API}/alerts?limit=2000`)
+      .then(r => r.json())
+      .then(data => { setAlerts(data); setLoadingAlerts(false); })
+      .catch(() => setLoadingAlerts(false));
+  }, []);
+
+  return (
+    <div className="h-screen flex flex-col">
+      <Header stats={stats} alertStats={alertStats} wsLive={false} />
+      <TabNav active={tab} onChange={setTab} />
+      <div className="flex-1 overflow-hidden">
+        {tab === "alerts" && (
+          <AlertQueue alerts={alerts} loading={loadingAlerts} filterType={filterType} setFilterType={setFilterType} onSelect={setSelectedAlert} />
+        )}
+        {tab === "live" && <LiveFeed />}
+        {tab === "entities" && <EntityExplorer alerts={alerts} />}
+        {tab === "devices" && <DeviceTrust />}
+        {tab === "map" && <WorldMap alerts={alerts} />}
+        {tab === "eval" && <EvalPanel />}
+      </div>
+      <AlertDetail alert={selectedAlert} onClose={() => setSelectedAlert(null)} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+
+<script>
+  // Manual Babel transform, forcing the CLASSIC JSX runtime explicitly.
+  // Babel Standalone's automatic <script type="text/babel"> scanning
+  // defaults to the "automatic" JSX runtime on recent versions, which
+  // injects `import { jsx as _jsx } from "react/jsx-runtime"` into the
+  // output - that throws "Cannot use import statement outside a module"
+  // in a plain (non-module) script and silently blanks the whole page.
+  // Doing the transform ourselves lets us pin runtime: "classic", which
+  // compiles JSX to plain React.createElement(...) calls instead -
+  // works with the global `React`/`ReactDOM` from the CDN scripts above,
+  // no bundler or module system required.
+  const source = document.getElementById("app-source").textContent;
+  const { code } = Babel.transform(source, {
+    presets: [["react", { runtime: "classic" }]],
+  });
+  const script = document.createElement("script");
+  script.textContent = code;
+  document.body.appendChild(script);
+</script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+</body>
+</html>
