@@ -118,25 +118,40 @@ Tested on a held-out chronological split (108,986 sessions, 330 entities):
 
 ## Demo
 
-Screenshots of the live analyst dashboard, one per panel:
+<table>
+  <tr>
+    <td align="center">
+      <b>Alert Queue</b><br>
+      <img src="images/demo/1.png" width="450">
+    </td>
+    <td align="center">
+      <b>Live Feed</b><br>
+      <img src="images/demo/2.png" width="450">
+    </td>
+  </tr>
 
-**Alert Queue**
-![Alert Queue](images/demo/1.png)
+  <tr>
+    <td align="center">
+      <b>World Map</b><br>
+      <img src="images/demo/3.png" width="450">
+    </td>
+    <td align="center">
+      <b>Entity Explorer</b><br>
+      <img src="images/demo/4.png" width="450">
+    </td>
+  </tr>
 
-**Live Feed**
-![Live Feed](images/demo/2.png)
-
-**World Map**
-![World Map](images/demo/3.png)
-
-**Entity Explorer**
-![Entity Explorer](images/demo/4.png)
-
-**Device Trust**
-![Device Trust](images/demo/5.png)
-
-**Model Evaluation**
-![Model Evaluation](images/demo/6.png)
+  <tr>
+    <td align="center">
+      <b>Device Trust</b><br>
+      <img src="images/demo/5.png" width="450">
+    </td>
+    <td align="center">
+      <b>Model Evaluation</b><br>
+      <img src="images/demo/6.png" width="450">
+    </td>
+  </tr>
+</table>
 
 ## Honest Findings
 
