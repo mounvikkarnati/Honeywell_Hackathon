@@ -82,22 +82,23 @@ Tested on a held-out chronological split (108,986 sessions, 330 entities):
 | Alerts generated | 1,971 |
 
 **ROC Curve**
-![ROC Curve](images/roc_curve.png)
+![ROC Curve](output/evaluation/roc_curve.png
+)
 
 **Precision-Recall Curve**
-![PR Curve](images/pr_curve.png)
+![PR Curve](output/evaluation/pr_curve.png)
 
 **Binary Detection Confusion Matrix**
-![Binary Confusion Matrix](images/confusion_matrix_binary.png)
+![Binary Confusion Matrix](output/evaluation/confusion_matrix_binary.png)
 
 **Attack-Type Classification Confusion Matrix**
-![Multiclass Confusion Matrix](images/confusion_matrix_multiclass.png)
+![Multiclass Confusion Matrix](output/evaluation/confusion_matrix_multiclass.png)
 
 **Risk Score Distribution (Normal vs. Anomaly)**
-![Score Distribution](images/score_distribution.png)
+![Score Distribution](output/evaluation/score_distribution.png)
 
 **Precision / Recall / False Positive Rate vs. Alert Budget**
-![Alert Budget Curve](images/alert_budget_curve.png)
+![Alert Budget Curve](output/evaluation/alert_budget_curve.png)
 
 ## Demo
 
