@@ -81,24 +81,40 @@ Tested on a held-out chronological split (108,986 sessions, 330 entities):
 | False Positive Rate | 0.003% |
 | Alerts generated | 1,971 |
 
-**ROC Curve**
-![ROC Curve](output/evaluation/roc_curve.png
-)
+<table>
+  <tr>
+    <td align="center">
+      <b>ROC Curve</b><br>
+      <img src="output/evaluation/roc_curve.png" width="450">
+    </td>
+    <td align="center">
+      <b>Precision-Recall Curve</b><br>
+      <img src="output/evaluation/pr_curve.png" width="450">
+    </td>
+  </tr>
 
-**Precision-Recall Curve**
-![PR Curve](output/evaluation/pr_curve.png)
+  <tr>
+    <td align="center">
+      <b>Binary Detection Confusion Matrix</b><br>
+      <img src="output/evaluation/confusion_matrix_binary.png" width="450">
+    </td>
+    <td align="center">
+      <b>Attack-Type Classification Confusion Matrix</b><br>
+      <img src="output/evaluation/confusion_matrix_multiclass.png" width="450">
+    </td>
+  </tr>
 
-**Binary Detection Confusion Matrix**
-![Binary Confusion Matrix](output/evaluation/confusion_matrix_binary.png)
-
-**Attack-Type Classification Confusion Matrix**
-![Multiclass Confusion Matrix](output/evaluation/confusion_matrix_multiclass.png)
-
-**Risk Score Distribution (Normal vs. Anomaly)**
-![Score Distribution](output/evaluation/score_distribution.png)
-
-**Precision / Recall / False Positive Rate vs. Alert Budget**
-![Alert Budget Curve](output/evaluation/alert_budget_curve.png)
+  <tr>
+    <td align="center">
+      <b>Risk Score Distribution (Normal vs. Anomaly)</b><br>
+      <img src="output/evaluation/score_distribution.png" width="450">
+    </td>
+    <td align="center">
+      <b>Precision / Recall / False Positive Rate vs. Alert Budget</b><br>
+      <img src="output/evaluation/alert_budget_curve.png" width="450">
+    </td>
+  </tr>
+</table>
 
 ## Demo
 
