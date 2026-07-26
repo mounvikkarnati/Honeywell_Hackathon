@@ -122,33 +122,33 @@ Tested on a held-out chronological split (108,986 sessions, 330 entities):
   <tr>
     <td align="center">
       <b>Alert Queue</b><br>
-      <img src="images/demo/1.png" width="450">
+      <img src="images/1.png" width="450">
     </td>
     <td align="center">
       <b>Live Feed</b><br>
-      <img src="images/demo/2.png" width="450">
+      <img src="images/2.png" width="450">
     </td>
   </tr>
 
   <tr>
     <td align="center">
       <b>World Map</b><br>
-      <img src="images/demo/3.png" width="450">
+      <img src="images/3.png" width="450">
     </td>
     <td align="center">
       <b>Entity Explorer</b><br>
-      <img src="images/demo/4.png" width="450">
+      <img src="images/4.png" width="450">
     </td>
   </tr>
 
   <tr>
     <td align="center">
       <b>Device Trust</b><br>
-      <img src="images/demo/5.png" width="450">
+      <img src="images/5.png" width="450">
     </td>
     <td align="center">
       <b>Model Evaluation</b><br>
-      <img src="images/demo/6.png" width="450">
+      <img src="images/6.png" width="450">
     </td>
   </tr>
 </table>
