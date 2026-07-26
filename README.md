@@ -16,7 +16,7 @@ Traditional signature-based security only catches attacks it already knows about
 4. **Explainability** — an analyst needs to know *why* something was flagged, not just a score
 5. **Cold-start problem** — brand-new users or devices have no history to compare against
 
-## Our Solution
+## Solution
 
 A complete, working pipeline — not a notebook, not a mockup:
 
